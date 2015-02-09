@@ -29,6 +29,7 @@
     angular.module('Bastion').value('markActiveMenu', mark_active_menu);
     angular.module('Bastion').constant('BastionConfig', {
         markTranslated: <%= SETTINGS[:mark_translated] || false %>
+        consumerCertRpm: <%= defined?(Katello) ? Katello.config.consumer_cert_rpm : '' %>
     });
   </script>
   <% Bastion.plugins.each do |name, plugin| %>
