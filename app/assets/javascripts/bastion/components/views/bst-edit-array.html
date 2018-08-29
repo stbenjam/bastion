@@ -1,0 +1,10 @@
+<form role="form">
+  <div class="form-group" ng-show="editMode">
+    <ul>
+      <li ng-repeat="option in model">{{ option }} <span ng-click="remove($index)" class="fa fa-remove inline-icon"></span></li>
+    </ul>
+
+    <input class="form-control" ng-model="inputValue"/> <button class="btn btn-primary" ng-click="add(inputValue)">Add</button>
+  </div>
+  <div bst-edit></div>
+</form>

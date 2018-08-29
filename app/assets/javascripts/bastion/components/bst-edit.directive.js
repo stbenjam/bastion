@@ -144,6 +144,8 @@ angular.module('Bastion.components')
         $scope.updateDisplay = function (newValue) {
             if ($scope.formatter) {
                 $scope.displayValue = $filter($scope.formatter)(newValue, $scope.formatterOptions);
+            } else if (Array.isArray($scope.model)) {
+                $scope.displayValue = $scope.model.join(", ");
             } else {
                 $scope.displayValue = $scope.model;
             }
@@ -165,6 +167,39 @@ angular.module('Bastion.components')
         $scope.$watch('forcedWorkingMode', function (newValue) {
             $scope.workingMode = newValue;
         });
+    }])
+    .directive('bstEditArray', function () {
+        return {
+            controller: 'BstEditArrayController',
+            scope: {
+                model: '=bstEditArray',
+                readonly: '=',
+                handleAdd: '&onAdd',
+            },
+            templateUrl: 'components/views/bst-edit-array.html'
+        };
+    })
+    .controller('BstEditArrayController', ['$scope', function ($scope) {
+        $scope.add = function (value) {
+            var handleAdd;
+            $scope.workingMode = true;
+            handleAdd = $scope.handleAdd(value);
+
+            if (angular.isDefined(handleAdd) && 'then' in handleAdd) {
+                handleAdd.then(
+                    function () {
+                        $scope.workingMode = false;
+                        $scope.model.push(value);
+                        $scope.inputValue = null;
+                    }
+                );
+            } else {
+                $scope.workingMode = false;
+                $scope.model.push(value);
+                $scope.inputValue = null;
+            }
+
+        };
     }])
     .directive('bstEditText', function () {
         return {
